@@ -1,3 +1,5 @@
 cmd/
 Makefile
 coverage
+cpu
+machine2human.test.exe
