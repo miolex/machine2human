@@ -3,8 +3,8 @@ Package machine2human help you convert seconds to readble string and vice verca.
 
 ## Installation
 1. The first need Go installed.
-```golang
-go get -u github.com/miolex/machine2human
+```console
+$ go get -u github.com/miolex/machine2human
 ```
 2. Import it in your code
 ```golang
