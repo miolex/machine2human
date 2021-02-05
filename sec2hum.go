@@ -3,6 +3,7 @@ package machine2human
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -22,12 +23,13 @@ var runeToRuString = map[rune][]string{
 	'h': {"часов", "час", "часа"},
 	'd': {"дней", "день", "дня"},
 	'w': {"недель", "неделя", "недели"},
-	'M': {"месяцев", "месяц", "месяца"},
+	'M': {"Месяцев", "Месяц", "Месяца"},
 	'y': {"лет", "год", "года"},
 }
 
 // Sec2Hum implement convertation secons to readable string
 func Sec2Hum(seconds int) string {
+	seconds = int(math.Abs(float64(seconds)))
 	var readebleString string
 	var temp int
 
