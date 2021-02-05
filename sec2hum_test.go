@@ -1,6 +1,10 @@
-package machine2human
+package machine2human_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/miolex/machine2human"
+)
 
 func TestSec2Hum(t *testing.T) {
 	var testTable = []struct {
@@ -33,7 +37,7 @@ func TestSec2Hum(t *testing.T) {
 	}
 
 	for _, testCase := range testTable {
-		actual := Sec2Hum(testCase.seconds)
+		actual := machine2human.Sec2Hum(testCase.seconds)
 		if actual != testCase.expected {
 			t.Errorf("Sec2Hum(%d): expected `%s` actual `%s`\n", testCase.seconds, testCase.expected, actual)
 		}
