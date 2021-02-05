@@ -1,9 +1,9 @@
 package machine2human
 
 import (
-	"regexp"
 	"strconv"
 	"strings"
+	"text/scanner"
 )
 
 var stringToSec = map[string]int{
@@ -34,24 +34,42 @@ func Hum2Sec(input string) int {
 
 	var seconds int
 	input = strings.TrimSpace(input)
-	r := regexp.MustCompile(`(\d+)+\s*([yMwdhmsглМндчмс])`)
 
-	matched := r.FindAll([]byte(input), -1)
+	matched := matcher(input)
 	for _, m := range matched {
-		temp := strings.Fields(string(m))
-		if len(temp) < 2 {
-			for i := range stringToSec {
-				if strings.Contains(temp[0], i) {
-					tmp := string(temp[0])
-					tmp = strings.ReplaceAll(tmp, i, " "+i)
-					temp = strings.Fields(tmp)
-				}
-			}
-		}
+		temp := m
 
 		t, _ := strconv.Atoi(temp[0])
 		seconds += t * stringToSec[temp[1]]
 	}
 
 	return seconds
+}
+
+func matcher(input string) [][]string {
+	result := make([][]string, 0, len(input))
+
+	var s scanner.Scanner
+	s.Init(strings.NewReader(input))
+
+	tokens := make([][]byte, 0, 16)
+
+	for tok := s.Scan(); tok != scanner.EOF; tok = s.Scan() {
+		tokens = append(tokens, []byte(s.TokenText()))
+	}
+
+	t := []rune("yMwdhmsглМндчмс")
+
+	for i, e := range tokens {
+		for _, v := range t {
+			if string(e[0]) == string(v) && i > 0 || string(e[0:2]) == string(v) && i > 0 {
+				if _, err := strconv.Atoi(string(tokens[i-1])); err == nil {
+					// fmt.Printf("%q looks like a number.\n", string(tokens[i-1])+" "+string([]rune(string(tokens[i]))[0]))
+					result = append(result, strings.Split(string(tokens[i-1])+" "+string([]rune(string(tokens[i]))[0]), " "))
+				}
+			}
+		}
+	}
+
+	return result
 }
