@@ -22,10 +22,12 @@ import (
 )
 
 func main() {
-	fmt.Println(machine2human.Sec2Hum(13453))
+	fmt.Println(machine2human.Sec2Hum(228))
+	fmt.Print(machine2human.Hum2Sec("12 минут"))
 }
 ```
 ```console
 $ go run example.go
-3 часа 44 минуты 13 секунд
+3 минуты 48 секунд
+720
 ```

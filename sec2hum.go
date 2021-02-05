@@ -6,16 +6,6 @@ import (
 	"strings"
 )
 
-var runeToRuString = map[rune][]string{
-	's': {"секунд", "секунда", "секунды"},
-	'm': {"минут", "минута", "минуты"},
-	'h': {"часов", "час", "часа"},
-	'd': {"дней", "день", "дня"},
-	'w': {"недель", "неделя", "недели"},
-	'M': {"Месяцев", "Месяц", "Месяца"},
-	'y': {"лет", "год", "года"},
-}
-
 const (
 	second = 1
 	minute = 60
@@ -26,83 +16,93 @@ const (
 	year   = 31536000
 )
 
+var runeToRuString = map[rune][]string{
+	's': {"секунд", "секунда", "секунды"},
+	'm': {"минут", "минута", "минуты"},
+	'h': {"часов", "час", "часа"},
+	'd': {"дней", "день", "дня"},
+	'w': {"недель", "неделя", "недели"},
+	'M': {"месяцев", "месяц", "месяца"},
+	'y': {"лет", "год", "года"},
+}
+
 // Sec2Hum implement convertation secons to readable string
-func Sec2Hum(seconds int64) string {
+func Sec2Hum(seconds int) string {
 	var readebleString string
-	var temp int64
+	var temp int
 
 	if seconds == 0 {
 		return fmt.Sprintf("0 %s", runeToRuString['s'][0])
 	}
 
 	// years
-	temp = int64(seconds / year)
+	temp = seconds / year
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['y'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * year)
+		seconds -= temp * year
 		temp = 0
 	}
 
 	// months
-	temp = int64(seconds / month)
+	temp = seconds / month
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['M'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * month)
+		seconds -= temp * month
 		temp = 0
 	}
 
 	// weeks
-	temp = int64(seconds / week)
+	temp = seconds / week
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['w'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * week)
+		seconds -= temp * week
 		temp = 0
 	}
 
 	// days
-	temp = int64(seconds / day)
+	temp = seconds / day
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['d'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * day)
+		seconds -= temp * day
 		temp = 0
 	}
 
 	// hours
-	temp = int64(seconds / hour)
+	temp = seconds / hour
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['h'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * hour)
+		seconds -= temp * hour
 		temp = 0
 	}
 
 	// minutes
-	temp = int64(seconds / minute)
+	temp = seconds / minute
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['m'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * minute)
+		seconds -= temp * minute
 		temp = 0
 	}
 
 	// seconds
-	temp = int64(seconds / second)
+	temp = seconds / second
 	if temp > 0 {
 		readebleString += fmt.Sprintf("%d %s", temp, runeToRuString['s'][yarusskiy(temp)])
 		readebleString += " "
-		seconds -= int64(temp * second)
+		seconds -= temp * second
 		temp = 0
 	}
 
-	readebleString = strings.Trim(readebleString, " ")
+	readebleString = strings.TrimSpace(readebleString)
 	return readebleString
 }
 
-func yarusskiy(digit int64) int {
+func yarusskiy(digit int) int {
 	tmp := digit % 100
 	if 11 <= tmp && tmp <= 19 {
 		return 0
@@ -114,8 +114,6 @@ func yarusskiy(digit int64) int {
 	if 2 <= tmp && tmp <= 4 {
 		return 2
 	}
-	if tmp == 0 || (5 <= tmp && tmp <= 9) {
-		return 0
-	}
+
 	return 0
 }
