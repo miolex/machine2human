@@ -24,7 +24,7 @@ func randInt(min, max int) int {
 func genString(n int) string {
 	rand.Seed(time.Now().Unix())
 	x := []rune("yлMМwнdдhчmмsс")
-	b := make([]string, n)
+	b := make([]string, 2*n)
 	for i := range b {
 		if i%2 == 0 {
 			ii := rand.Int31n(100-1) + 1
