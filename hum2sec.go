@@ -34,42 +34,42 @@ func Hum2Sec(input string) int {
 
 	var seconds int
 	input = strings.TrimSpace(input)
+	parsed := parser(input)
 
-	matched := matcher(input)
-	for _, m := range matched {
-		temp := m
+	for _, parsingCase := range parsed {
 
-		t, _ := strconv.Atoi(temp[0])
-		seconds += t * stringToSec[temp[1]]
+		t, _ := strconv.Atoi(parsingCase[0])
+		seconds += t * stringToSec[parsingCase[1]]
 	}
 
 	return seconds
 }
 
-func matcher(input string) [][]string {
-	result := make([][]string, 0, len(input))
+func parser(input string) [][]string {
+	result := make([][]string, 0)
+	tokens := make([][]byte, 0)
+	tokenizer(&tokens, input)
+	humanTokens := []rune("yMwdhmsглМндчмс")
 
-	var s scanner.Scanner
-	s.Init(strings.NewReader(input))
+	for index, value := range tokens {
+		for _, v := range humanTokens {
+			if string(value[0]) == string(v) && index > 0 || string(value[0:2]) == string(v) && index > 0 {
+				if _, err := strconv.Atoi(string(tokens[index-1])); err == nil {
 
-	tokens := make([][]byte, 0, 16)
-
-	for tok := s.Scan(); tok != scanner.EOF; tok = s.Scan() {
-		tokens = append(tokens, []byte(s.TokenText()))
-	}
-
-	t := []rune("yMwdhmsглМндчмс")
-
-	for i, e := range tokens {
-		for _, v := range t {
-			if string(e[0]) == string(v) && i > 0 || string(e[0:2]) == string(v) && i > 0 {
-				if _, err := strconv.Atoi(string(tokens[i-1])); err == nil {
-					// fmt.Printf("%q looks like a number.\n", string(tokens[i-1])+" "+string([]rune(string(tokens[i]))[0]))
-					result = append(result, strings.Split(string(tokens[i-1])+" "+string([]rune(string(tokens[i]))[0]), " "))
+					result = append(result, []string{string(tokens[index-1]), string([]rune(string(tokens[index]))[0])})
 				}
 			}
 		}
 	}
 
 	return result
+}
+
+func tokenizer(tokens *[][]byte, input string) {
+	var s scanner.Scanner
+	s.Init(strings.NewReader(input))
+
+	for token := s.Scan(); token != scanner.EOF; token = s.Scan() {
+		*tokens = append(*tokens, []byte(s.TokenText()))
+	}
 }
