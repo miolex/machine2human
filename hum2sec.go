@@ -29,10 +29,9 @@ func Hum2Sec(input string) int {
 	// if string just is number for example "1332"
 	x, err := strconv.Atoi(input)
 	if err == nil {
-		if x < 0 {
-			return -x
+		if x >= 0 {
+			return x
 		}
-		return x
 	}
 
 	var seconds int
@@ -58,7 +57,6 @@ func parser(input string) [][]string {
 		for _, v := range humanTokens {
 			if string(value[0]) == string(v) && index > 0 || string(value[0:2]) == string(v) && index > 0 {
 				if _, err := strconv.Atoi(string(tokens[index-1])); err == nil {
-
 					result = append(result, []string{string(tokens[index-1]), string([]rune(string(tokens[index]))[0])})
 				}
 			}
