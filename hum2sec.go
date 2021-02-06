@@ -1,7 +1,6 @@
 package machine2human
 
 import (
-	"math"
 	"strconv"
 	"strings"
 	"text/scanner"
@@ -30,7 +29,10 @@ func Hum2Sec(input string) int {
 	// if string just is number for example "1332"
 	x, err := strconv.Atoi(input)
 	if err == nil {
-		return int(math.Abs(float64(x)))
+		if x < 0 {
+			return -x
+		}
+		return x
 	}
 
 	var seconds int
