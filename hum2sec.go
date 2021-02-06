@@ -26,6 +26,7 @@ var stringToSec = map[string]int{
 
 // Hum2Sec implement convertation readable string to seconds
 func Hum2Sec(input string) int {
+	input = strings.TrimSpace(input)
 	// if string just is number for example "1332"
 	x, err := strconv.Atoi(input)
 	if err == nil {
@@ -35,7 +36,6 @@ func Hum2Sec(input string) int {
 	}
 
 	var seconds int
-	input = strings.TrimSpace(input)
 	parsed := parser(input)
 
 	for _, parsingCase := range parsed {
