@@ -1,5 +1,5 @@
 # machine2human
-Package machine2human help you convert seconds to readble string and vice verca.
+Package machine2human help you convert seconds to readble string and vice versa.
 
 ## Installation
 1. The first need Go installed.
